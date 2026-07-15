@@ -1,0 +1,22 @@
+# Core data handling
+pandas>=2.0
+odfpy>=1.4          # read .ods (OpenDocument) spreadsheets from gov.uk
+requests>=2.31      # download source files
+
+# Step 3 — retrieval + ReAct classification agent
+tavily-python>=0.3        # web search tool the agent drives
+anthropic>=0.39           # Claude (Anthropic API or Bedrock)
+boto3>=1.34               # AWS credential resolution for the Bedrock backend (SSO)
+python-dotenv>=1.0        # load API keys from .env (never committed)
+langgraph>=0.6            # ReAct agent graph
+langchain-core>=0.3       # tool + message primitives
+langchain-anthropic>=0.3  # ChatAnthropic backend
+langchain-aws>=0.2        # ChatBedrockConverse backend
+
+# Step 4 — validation
+scikit-learn>=1.3   # precision/recall metrics
+
+# Step 5 — dashboard
+# The dashboard is a static MapLibre page (dashboard/index.html) with no Python
+# runtime; it only needs pipeline.build_dashboard to regenerate data.json, which
+# uses pandas (above). No extra dependency required.

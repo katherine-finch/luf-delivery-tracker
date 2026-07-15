@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Levelling Up Fund — North West England delivery tracker</title>
+
+    <!-- MapLibre GL JS: open-source slippy map, no API key required. -->
+    <link
+      href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <!-- Header stat block: portfolio-level summary. -->
+    <header id="topbar">
+      <div class="topbar-title">
+        <h1>Levelling Up Fund — North West</h1>
+        <p>Delivery status of Round 1 &amp; 2 projects, traced to public sources.</p>
+      </div>
+      <div id="stats" class="stats"><!-- filled by app.js --></div>
+    </header>
+
+    <!-- Colour key for the pins. -->
+    <div id="legend" class="legend"><!-- filled by app.js --></div>
+
+    <!-- Slide-in detail panel: the "progressive discovery" surface. -->
+    <aside id="panel" class="panel" aria-hidden="true">
+      <button id="panel-close" class="panel-close" aria-label="Close">&times;</button>
+      <div id="panel-body"><!-- filled by app.js on pin click --></div>
+    </aside>
+
+    <footer id="footer">
+      <span id="footer-generated"></span>
+      Map data © OpenStreetMap contributors. Status inferred by an AI agent from
+      public sources — see each project's evidence.
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
