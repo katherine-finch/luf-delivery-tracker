@@ -1,10 +1,10 @@
 :root {
-  --on_track: #1a9850;
+  --on_track: #2b6cb0;
   --delayed: #f4a63f;
   --stalled: #d73027;
   --rescoped: #7b6cd0;
   --cancelled: #7a7a7a;
-  --completed: #2b6cb0;
+  --completed: #1a9850;
   --unknown: #b8b8b8;
 
   --ink: #1a1f2b;
@@ -57,6 +57,26 @@ body {
   color: var(--muted);
   margin: 0 0 10px;
   line-height: 1.35;
+}
+
+/* "What is the Levelling Up Fund?" trigger under the subtitle. */
+.about-link {
+  display: inline-block;
+  margin: 0 0 10px;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--on_track);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.about-link:hover {
+  color: var(--ink);
 }
 
 .stats {
@@ -292,4 +312,80 @@ body {
 
 #footer-generated {
   font-weight: 600;
+}
+
+/* ---- About the Levelling Up Fund modal ----------------------------------- */
+.about-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(20, 30, 50, 0.45);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.about-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.about-modal {
+  position: relative;
+  background: var(--panel-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 520px;
+  width: 100%;
+  max-height: 86vh;
+  overflow-y: auto;
+  padding: 30px 30px 26px;
+}
+
+.about-modal h2 {
+  font-size: 20px;
+  margin: 0 30px 14px 0;
+  letter-spacing: -0.02em;
+}
+
+.about-modal p {
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0 0 12px;
+}
+
+.about-modal .about-source {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.about-modal a {
+  color: var(--on_track);
+  text-decoration: none;
+}
+
+.about-modal a:hover {
+  text-decoration: underline;
+}
+
+.about-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: none;
+  background: none;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.about-close:hover {
+  color: var(--ink);
 }

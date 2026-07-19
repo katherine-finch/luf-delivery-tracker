@@ -21,8 +21,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-from .agent import _build_chat_model
-from .retrieve import get_client as _get_tavily_client
+from ._grounded import get_backends, search_context
 
 load_dotenv()
 
@@ -32,7 +31,6 @@ BASE_CSV = DATA_DIR / "projects_base.csv"
 DESCRIPTIONS_CSV = DATA_DIR / "descriptions.csv"
 
 _OUTPUT_COLUMNS = ["project_name", "summary"]
-_MAX_RESULTS = 5
 
 _SYSTEM = (
     "You are a neutral public-policy writer. From the provided search results, "
@@ -63,27 +61,12 @@ def _read_cache() -> dict[str, str]:
         return {r["project_name"]: r.get("summary", "") for r in csv.DictReader(fh)}
 
 
-def _search_context(tavily, project_name: str, council: str) -> str:
-    """Return a numbered block of search snippets to ground the description."""
-    query = f"{project_name} {council} Levelling Up Fund project plan"
-    try:
-        response = tavily.search(query=query, max_results=_MAX_RESULTS, search_depth="basic")
-    except Exception as exc:  # pragma: no cover - network guard
-        raise DescribeError(f"Search failed for {project_name!r}: {exc}") from exc
-    results = response.get("results", [])
-    lines = []
-    for i, r in enumerate(results, start=1):
-        lines.append(f"[{i}] {r.get('title', '').strip()}\n{r.get('content', '').strip()}")
-    return "\n\n".join(lines)
-
-
 def build_descriptions(force: bool = False) -> list[dict]:
     """Generate (or reuse cached) descriptions for every project; writes the CSV."""
     projects = _read_projects()
     cache = {} if force else _read_cache()
 
-    model = _build_chat_model()
-    tavily = _get_tavily_client()
+    model, tavily = get_backends()
     rows: list[dict] = []
 
     for p in projects:
@@ -92,7 +75,7 @@ def build_descriptions(force: bool = False) -> list[dict]:
             rows.append({"project_name": name, "summary": cache[name]})
             continue
 
-        context = _search_context(tavily, name, p["council"])
+        context = search_context(tavily, f"{name} {p['council']} Levelling Up Fund project plan")
         prompt = (
             f"PROJECT: {name} (lead body: {p['council']})\n\n"
             f"SEARCH RESULTS:\n{context}\n\n"

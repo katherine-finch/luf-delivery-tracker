@@ -27,7 +27,8 @@ BASE_CSV = DATA_DIR / "projects_base.csv"
 PREDICTIONS_CSV = DATA_DIR / "predictions.csv"
 LOCATIONS_CSV = DATA_DIR / "locations.csv"
 DESCRIPTIONS_CSV = DATA_DIR / "descriptions.csv"
-OUTPUT_JSON = REPO_ROOT / "dashboard" / "data.json"
+RETROSPECTIVES_CSV = DATA_DIR / "retrospectives.csv"
+OUTPUT_JSON = REPO_ROOT / "docs" / "data.json"
 
 
 class BuildError(RuntimeError):
@@ -77,6 +78,13 @@ def build() -> dict:
     else:
         descriptions = pd.DataFrame(columns=["project_name", "summary"])
 
+    # Static one-off retrospectives ("how it went") for completed projects only.
+    # Optional: absent for in-flight projects, and the map builds fine without it.
+    if RETROSPECTIVES_CSV.exists():
+        retrospectives = pd.read_csv(RETROSPECTIVES_CSV)[["project_name", "outcome"]]
+    else:
+        retrospectives = pd.DataFrame(columns=["project_name", "outcome"])
+
     merged = base.merge(locations, on="project_name", how="left")
     missing_loc = merged[merged["lat"].isna()]["project_name"].tolist()
     if missing_loc:
@@ -91,6 +99,7 @@ def build() -> dict:
         how="left",
     )
     merged = merged.merge(descriptions, on="project_name", how="left")
+    merged = merged.merge(retrospectives, on="project_name", how="left")
 
     projects = []
     for _, r in merged.iterrows():
@@ -102,6 +111,8 @@ def build() -> dict:
         justification = justification if isinstance(justification, str) else ""
         summary = r.get("summary")
         summary = summary if isinstance(summary, str) else ""
+        outcome = r.get("outcome")
+        outcome = outcome if isinstance(outcome, str) else ""
 
         projects.append(
             {
@@ -119,6 +130,7 @@ def build() -> dict:
                 "status": status,
                 "confidence": confidence,
                 "justification": justification,
+                "outcome": outcome,
                 "citations": _parse_citations(r.get("citations")),
             }
         )

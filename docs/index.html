@@ -21,6 +21,9 @@
       <div class="topbar-title">
         <h1>Levelling Up Fund — North West</h1>
         <p>Delivery status of Round 1 &amp; 2 projects, traced to public sources.</p>
+        <button id="about-open" class="about-link" type="button">
+          What is the Levelling Up Fund?
+        </button>
       </div>
       <div id="stats" class="stats"><!-- filled by app.js --></div>
     </header>
@@ -39,6 +42,52 @@
       Map data © OpenStreetMap contributors. Status inferred by an AI agent from
       public sources — see each project's evidence.
     </footer>
+
+    <!-- About the Levelling Up Fund: context pop-out for readers new to the scheme. -->
+    <div id="about-overlay" class="about-overlay" aria-hidden="true">
+      <div
+        class="about-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="about-title"
+      >
+        <button id="about-close" class="about-close" aria-label="Close">&times;</button>
+        <h2 id="about-title">What is the Levelling Up Fund?</h2>
+        <p>
+          The <strong>Levelling Up Fund (LUF)</strong> was a UK government
+          capital fund, launched in 2021, worth <strong>£4.8&nbsp;billion</strong>.
+          It paid for local infrastructure — town-centre regeneration,
+          transport, and cultural or heritage assets — intended to reduce
+          economic gaps between richer and poorer parts of the UK, the agenda
+          the government called "levelling up".
+        </p>
+        <p>
+          Money was awarded by <strong>competitive bidding</strong>: local
+          authorities submitted project proposals, and winners were announced in
+          <strong>Round 1 (October 2021)</strong> and
+          <strong>Round 2 (January 2023)</strong>. Each award funds a specific,
+          named project rather than general council spending.
+        </p>
+        <p>
+          Official evaluations have found that many funded projects are running
+          behind their original timelines — but those are one-off manual
+          snapshots. This tracker focuses on the
+          <strong>27 projects led by North West England councils</strong> across
+          Rounds 1 and 2, and infers each one's current delivery status from
+          public sources, so the picture can be refreshed on demand.
+        </p>
+        <p class="about-source">
+          Source:
+          <a
+            href="https://www.gov.uk/government/publications/levelling-up-fund-round-2-successful-bidders"
+            target="_blank"
+            rel="noopener"
+            >GOV.UK — Levelling Up Fund</a
+          >
+          (Open Government Licence v3.0).
+        </p>
+      </div>
+    </div>
 
     <script src="app.js"></script>
   </body>

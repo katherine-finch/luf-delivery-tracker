@@ -1,5 +1,5 @@
 {
-  "generated": "2026-07-15",
+  "generated": "2026-07-19",
   "summary": {
     "project_count": 27,
     "total_awarded_gbp": 586484518,
@@ -28,6 +28,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction verifiably underway: market Phase One completed January 2026, active travel works starting January 2026, Civic Way demolition completed July 2025.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.cheshirewestandchester.gov.uk/news/work-begins-in-ellesmere-port-town-centre-on-the-biggest-investment-for-decades",
@@ -62,6 +63,7 @@
       "status": "delayed",
       "confidence": "high",
       "justification": "Demolition began August 2024, construction underway, but explicitly delayed with completion extended to June 2026 due to engineering challenges.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.cumberland.gov.uk/news/2024/demolition-begins-enable-major-workington-project",
@@ -96,6 +98,7 @@
       "status": "rescoped",
       "confidence": "high",
       "justification": "Original Market Hall refurbishment plans formally cancelled June 2025; scope changed to demolition and broader transformation.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://brilliantbarrow.org.uk/levelling-up-fund",
@@ -130,6 +133,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "First industrial units became available August 2025; additional units approved April 2026 for summer 2027 delivery.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://ishco.co.uk/2025/08/ish-enterprise-campus-announces-first-units-released",
@@ -164,6 +168,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction works commenced January 2024 on A5086 and A595; resurfacing reached 200,000m2 by late 2024.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.cumberland.gov.uk/news/2024/ps143-million-investment-a595-and-a5086-road-improvements",
@@ -198,6 +203,7 @@
       "status": "completed",
       "confidence": "high",
       "justification": "Building construction completed May 2024; facility opened for student applications and courses began September 2024.",
+      "outcome": "Construction of the Bolton College of Medical Sciences began in July 2022, with completion expected in 2024. The facility, located at Royal Bolton Hospital, received £20 million from the Levelling Up Fund to train up to 3,000 healthcare students annually.",
       "citations": [
         {
           "source_url": "https://www.theboltonnews.co.uk/news/24285731.bolton-institute-medical-sciences-building-work-completed",
@@ -232,6 +238,7 @@
       "status": "delayed",
       "confidence": "high",
       "justification": "Construction actively underway with swimming pool installation and cladding work, but completion extended from winter 2024 to July 2026.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.bury.gov.uk/planning-building-control/regeneration/radcliffe-regeneration/radcliffe-hub-progress-and-upcoming-site-works",
@@ -266,6 +273,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction verifiably underway: groundbreaking January 2025, steel erection April 2025, foundation and frame works progressing September 2025, no adverse news.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.mynewsdesk.com/uk/bury-council/pressreleases/groundbreaking-event-marks-official-start-of-bury-market-transformation-3365509",
@@ -300,6 +308,7 @@
       "status": "completed",
       "confidence": "high",
       "justification": "Campfield campus officially opened June 25, 2025, after £17.5m transformation of Upper Campfield Market into creative tech hub.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.thebusinessdesk.com/northwest/news/2154600-campfield-opening-celebrates-successful-partnership-of-public-and-private-sectors",
@@ -334,6 +343,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction underway on Northern Roots Visitor Centre, a key component; opening scheduled for summer/autumn 2026.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.oldham.gov.uk/news/article/2799/work_to_begin_on_129m_visitor_centre",
@@ -368,6 +378,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction began October 2024; piling works underway as of January 2025; bridge construction progressing toward summer 2026 completion.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.theconstructionindex.co.uk/news/view/construction-of-salford-rise-begins",
@@ -402,6 +413,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction began 2024, physical works verifiably underway with kiosks installed and trees planted, on track for Spring 2026 completion.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.tameside.gov.uk/towns/ashton-under-lyne-menu/ashton-town-centre",
@@ -436,6 +448,7 @@
       "status": "stalled",
       "confidence": "high",
       "justification": "Facility closed June 2024; contractor Speller Metcalfe appointed but no main construction contract signed; August 2025 tender re-issued.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.facebook.com/traffordcouncil/posts/-dont-forget-that-partington-sports-village-will-close-for-refurbishment-this-su/849374137225286",
@@ -470,6 +483,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Exterior works completed summer 2025; planning approved April 2026; interior work scheduled to commence summer 2026.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://wigan.moderngov.co.uk/documents/s98581/Haigh%20Hall.pdf?a=1",
@@ -504,6 +518,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction commenced January 2026 on M65 Junction 5 works; walking/cycling routes progressing with 2025 completion targets.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://democracy.blackburn.gov.uk/documents/s31054/Blackburn%20M65%20Junction%205%20Improvements%20-%20Notice%20to%20Proceed%20to%20Construction%20Stage.pdf",
@@ -538,6 +553,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Demolition work verifiably started September 2025; construction preparation underway as of December 2025.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.blackpoolgazette.co.uk/news/demolition-underway-in-blackpool-to-make-way-for-ps65m-multiversity-5315268",
@@ -572,6 +588,7 @@
       "status": "completed",
       "confidence": "high",
       "justification": "Town 2 Turf officially opened August 2024; Newtown Mill nearing completion October 2024 for January student use.",
+      "outcome": "Lancashire County Council completed the £3.4m railway station accessibility improvements at Burnley Manchester Road, delivering a new footbridge and lifts to the Preston-bound platform as planned under the Levelling Up Fund package.",
       "citations": [
         {
           "source_url": "https://www.burnleyfootballclub.com/content/town2turf-is-officially-open",
@@ -606,6 +623,7 @@
       "status": "delayed",
       "confidence": "high",
       "justification": "Market Hall construction underway but reopening slipped from April 2025 to late summer 2025, then to November 2026.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://news.lancashire.gov.uk/news/county-councillors-visit-accrington-market-hall-to-celebrate-redevelopment-progress",
@@ -640,6 +658,7 @@
       "status": "delayed",
       "confidence": "med",
       "justification": "Construction expected September 2024 but tender states no contract until funding confirmed; work now planned for later 2025.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://council.lancashire.gov.uk/ieDecisionDetails.aspx?Id=24680",
@@ -670,6 +689,7 @@
       "status": "delayed",
       "confidence": "high",
       "justification": "Site investigation began September 2025, but project missed 2024 construction start; main construction now scheduled June 2026.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.placenorthwest.co.uk/fresh-images-revealed-for-eden-project-morecambe",
@@ -704,6 +724,7 @@
       "status": "completed",
       "confidence": "high",
       "justification": "Colne Market Hall reopened May 1, 2026 after construction began January 2024; theatre renovations completed June 2024.",
+      "outcome": "The £6.5 million Levelling Up Fund investment in Colne town centre included a £3.5 million regeneration of Colne Market Hall, which opened to the public on 1 May 2026, and improvements to three cultural venues: the Muni Theatre, Pendle Hippodrome, and the Little Theatre.",
       "citations": [
         {
           "source_url": "https://sitesurvey.co.uk/news/supporting-the-redevelopment-of-colne-market-hall",
@@ -738,6 +759,7 @@
       "status": "rescoped",
       "confidence": "high",
       "justification": "Ashton Park sports hub component scrapped July 2024 due to spiralling costs; funding reallocated within programme.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.placenorthwest.co.uk/preston-pulls-plug-on-9-7m-sports-hub",
@@ -768,6 +790,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction work commenced December 2025 on all-weather pitch upgrades; phased delivery continuing through 2026.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.knowsleynews.co.uk/major-investment-coming-to-halewood-leisure-centre",
@@ -802,6 +825,7 @@
       "status": "delayed",
       "confidence": "high",
       "justification": "Tate Liverpool closed October 2023 for transformation, originally planned to reopen 2025, now delayed to 2027 due to funding issues.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://www.tate.org.uk/press/press-releases/transformation-works-to-begin-at-tate-liverpool-in-october",
@@ -840,6 +864,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction works scheduled for April 2026 on Queens Drive; £24.19m already spent by March 2025.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://liverpoolexpress.co.uk/council-to-begin-key-improvement-works-on-queens-drive",
@@ -866,6 +891,7 @@
       "status": "on_track",
       "confidence": "high",
       "justification": "Construction underway on Town Hall restoration since 2025 and Market Square works commenced January 2026 with groundbreaking ceremony.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://news.sthelens.gov.uk/article/13853/Homegrown-skills-lead-the-way-as-Earlestown-Town-Hall-revamp-progresses",
@@ -900,6 +926,7 @@
       "status": "rescoped",
       "confidence": "high",
       "justification": "Project underwent partial rescope and redesign in October 2025 due to overbudget cost plan; preparatory works underway February 2026.",
+      "outcome": "",
       "citations": [
         {
           "source_url": "https://democracy.wirral.gov.uk/documents/s50137883/Birkenhead%20Waterfront%20and%20Surrounds%20Scheme%20Delivery%20Implementation%20Report.pdf",

@@ -11,12 +11,12 @@
  */
 
 const STATUS_COLORS = {
-  on_track: "#1a9850",
+  on_track: "#2b6cb0",
   delayed: "#f4a63f",
   stalled: "#d73027",
   rescoped: "#7b6cd0",
   cancelled: "#7a7a7a",
-  completed: "#2b6cb0",
+  completed: "#1a9850",
   unknown: "#b8b8b8",
 };
 
@@ -214,6 +214,13 @@ function openPanel(p) {
     <div class="amount-label">Levelling Up Fund award</div>
 
     ${
+      p.outcome
+        ? `<div class="section-title">How it went</div>
+           <p class="justification">${escapeHtml(p.outcome)}</p>`
+        : ""
+    }
+
+    ${
       p.justification
         ? `<div class="section-title">Why this status</div>
            <p class="justification">${escapeHtml(p.justification)}</p>`
@@ -244,6 +251,29 @@ function openPanel(p) {
 function closePanel() {
   panel.classList.remove("open");
   panel.setAttribute("aria-hidden", "true");
+}
+
+// ---- About the Levelling Up Fund modal -------------------------------------
+const aboutOverlay = document.getElementById("about-overlay");
+document.getElementById("about-open").addEventListener("click", openAbout);
+document.getElementById("about-close").addEventListener("click", closeAbout);
+// Click the dimmed backdrop (but not the modal itself) to dismiss.
+aboutOverlay.addEventListener("click", (e) => {
+  if (e.target === aboutOverlay) closeAbout();
+});
+// Escape key closes the modal too.
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeAbout();
+});
+
+function openAbout() {
+  aboutOverlay.classList.add("open");
+  aboutOverlay.setAttribute("aria-hidden", "false");
+}
+
+function closeAbout() {
+  aboutOverlay.classList.remove("open");
+  aboutOverlay.setAttribute("aria-hidden", "true");
 }
 
 function escapeHtml(str) {

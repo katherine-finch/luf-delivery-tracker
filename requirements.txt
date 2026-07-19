@@ -13,10 +13,7 @@ langchain-core>=0.3       # tool + message primitives
 langchain-anthropic>=0.3  # ChatAnthropic backend
 langchain-aws>=0.2        # ChatBedrockConverse backend
 
-# Step 4 — validation
-scikit-learn>=1.3   # precision/recall metrics
-
-# Step 5 — dashboard
-# The dashboard is a static MapLibre page (dashboard/index.html) with no Python
+# Dashboard
+# The dashboard is a static MapLibre page (docs/index.html) with no Python
 # runtime; it only needs pipeline.build_dashboard to regenerate data.json, which
 # uses pandas (above). No extra dependency required.

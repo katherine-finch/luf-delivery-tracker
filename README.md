@@ -30,10 +30,8 @@ Delivery status is drawn from six categories:
 | Step | What it does | Status |
 |------|--------------|--------|
 | **1. Base dataset** | Parse the GOV.UK LUF Round 1 & 2 bidder lists (.ods), filter to North West England, produce a clean table. | ✅ Done |
-| **2. Ground truth** | Hand-code delivery status from primary per-project sources (council reports, official openings, GOV.UK case studies, local press) as an independent validation sample. | ✅ Done |
-| **3. Retrieve + classify** | A LangGraph ReAct agent researches each project — searching the web (Tavily) in a loop until it can justify a status with Claude — returning status, confidence, a justification, and multiple `{source, finding}` citations. | ✅ Done |
-| **4. Validate** | Compare pipeline output to ground truth; report precision/recall per status, a confusion matrix, and confidence calibration — surfacing weak spots honestly. | ✅ Done |
-| **5. Present** | Static, zero-backend map dashboard: every project pinned and colour-coded by status, with a click-through panel showing the original plan, the inferred status, and the cited evidence behind it. | ✅ Done |
+| **2. Retrieve + classify** | A LangGraph ReAct agent researches each project — searching the web (Tavily) in a loop until it can justify a status with Claude — returning status, confidence, a justification, and multiple `{source, finding}` citations. | ✅ Done |
+| **3. Present** | Static, zero-backend map dashboard: every project pinned and colour-coded by status, with a click-through panel showing the original plan, the inferred status, and the cited evidence behind it. | ✅ Done |
 
 ---
 
@@ -78,31 +76,10 @@ python -m pipeline.scrape_base
 
 ---
 
-## Step 2 — ground truth (done)
+## How delivery status is defined
 
-To validate the automated pipeline (Step 4) we need an independent, human-verified
-label for each project's delivery status.
-
-**Why not just use the NAO report / PAC follow-up?** They were the obvious
-candidate, but on inspection both are **programme-level**: the National Audit
-Office report and Public Accounts Committee follow-up assess LUF/Towns Fund
-delivery *in aggregate* (spend profiles, national delay rates) and only touch a
-handful of North West projects qualitatively (e.g. Knowsley as an interview
-case study). They do **not** publish a per-project status we could code.
-
-**Approach.** We hand-coded status for **11 of the 27 projects** from *primary
-per-project sources*, prioritising, in order of preference:
-
-1. **Council pages / committee reports** (e.g. `blackpool.gov.uk` Town Deal board papers)
-2. **GOV.UK case studies** (e.g. the £20m Liverpool culture investment)
-3. **Reputable regional press** (Place North West, LancsLive, Manchester Evening News)
-
-Each label cites a specific URL and records the reasoning in a `notes` field —
-including deliberately-flagged hard cases (e.g. *rescoped vs delayed* for Eden
-Project Morecambe, *rescoped vs stalled* for Barrow town centre).
-
-Output: [`data/ground_truth.csv`](data/ground_truth.csv) —
-`project_name, status, confidence, source, notes` (joins to the base dataset on `project_name`).
+Before classifying anything, we pin down what "delivered" means and which parts
+of it public text can actually reveal.
 
 ### How we gauge delivery status
 
@@ -139,41 +116,32 @@ bid. We label progress, and flag schedule slippage separately as `delayed`.
 
 ### Confidence tiering
 
-Every label carries a `confidence` grade reflecting **evidence strength**, so a
-weak judgement is never presented as a strong one:
+Every classification carries a `confidence` grade reflecting **evidence
+strength**, so a weak judgement is never presented as a strong one:
 
-- **`high`** — a dated, physical event from a primary source (e.g. "construction began Oct 2024"). *Salford Rise, Wirral Woodside, Radcliffe.*
-- **`med`** — credible progress but partly the council's own framing. *Haigh Hall, Barrow.*
-- **`low`** — only forward-looking language ("progress *expected* in 2025"). *Liverpool Docks — the softest label in the set.*
+- **`high`** — a dated, physical event from a primary source (e.g. "construction began Oct 2024").
+- **`med`** — credible progress but partly the council's own framing.
+- **`low`** — only forward-looking language ("progress *expected* in 2025").
 
-Step 3's classifier must reproduce this same output (status **+ confidence +**
-a supporting quote), and Step 4 can then report accuracy **stratified by
-confidence** — the low-confidence cases are exactly where human and model are
-most likely (and most interestingly) to disagree.
-
-Status distribution in the sample: `on_track` ×7, `rescoped` ×2, `delayed` ×1,
-`completed` ×1. **No `stalled` or `cancelled` labels** — we found no primary
-evidence of either among these North West awards, so they are honestly absent
-rather than invented. This means Step 4 can measure precision/recall for the
-four observed classes only.
+The classifier returns status **+ confidence + a supporting quote** together, so
+a reader can always weigh how firm each call is. `stalled` and `cancelled` are
+valid categories but rare among these North West awards — they are only applied
+where primary evidence supports them, never invented to fill the table.
 
 ---
 
 ## Limitations & honesty notes
 
 - **North West only.** See the scope banner above.
-- **Validation sample is 11/27 projects**, and skewed toward projects with
-  strong public coverage — precision/recall in Step 4 should be read with that
-  in mind.
-- Ground-truth labels reflect the delivery position at time of research; a
+- A classification reflects the delivery position at the time of the run; a
   "completed" flagship element (e.g. Colne Market Hall) may sit inside a wider
-  programme that is still ongoing — captured in the `notes` field.
-- Later steps will add the strict rule that **every status classification must
-  trace back to a real retrieved source** — no guessing.
+  programme that is still ongoing.
+- Every status classification must trace back to a real retrieved source — the
+  agent may not guess (enforced in code, see below).
 
 ---
 
-## Step 3 — retrieve + classify (done)
+## Step 2 — retrieve + classify (done)
 
 The pipeline turns the base dataset into a delivery-status prediction for every
 project, using only text it can cite. Classification is done by a **LangGraph
@@ -200,8 +168,8 @@ non-`unknown` label traces to a real, retrieved source.
 supports — so a reader (and the dashboard) can see *where* each fact came from,
 not just a single link.
 
-The agent's status signals and confidence tiers are the same rubric documented
-in Step 2 above, so ground truth and predictions are judged on one definition.
+The agent's status signals and confidence tiers follow the rubric documented
+above, so every project is judged on one definition.
 
 **Search budget.** `AGENT_MAX_SEARCHES` (env, default 5) caps how many web
 searches the agent may run per project. It maps to LangGraph's `recursion_limit`
@@ -214,7 +182,7 @@ searches the agent may run per project. It maps to LangGraph's `recursion_limit`
 
 Output: [`data/predictions.csv`](data/predictions.csv) —
 `project_name, council, status, confidence, justification, citations, model, backend`
-(`citations` is a JSON list; joins to `ground_truth.csv` on `project_name` for Step 4).
+(`citations` is a JSON list).
 
 Run it:
 
@@ -232,59 +200,17 @@ prompt — the trade-off for much better recall on hard, sparsely-reported proje
 
 There is **no model training here.** We use a pre-trained model (Claude) for
 **zero-shot classification** — it labels from the prompt's rules alone, having
-seen zero labelled examples. Consequently `ground_truth.csv` is **not** training
-data: it is a held-out **validation / gold set** used only in Step 4 to *measure*
-how often the zero-shot predictions match careful human judgement. The
-engineering value is the **retrieval + agent design + evaluation** loop, not
-weight training.
+seen zero labelled examples. The engineering value is the **retrieval + agent
+design** loop, not weight training.
 
 ---
 
-## Step 4 — validate (done)
-
-[`pipeline/validate.py`](pipeline/validate.py) is the project's honesty check. It
-joins `data/predictions.csv` to `data/ground_truth.csv` on `project_name`
-(inner join = the labelled subset) and reports how well the automated pipeline
-agrees with careful human judgement:
-
-- **Overall accuracy** and **macro-averaged F1** on the labelled subset.
-- **Precision / recall / F1 per status** (via scikit-learn) — so we can see, for
-  example, whether `rescoped` is harder to call than `completed`.
-- **Confusion matrix** — which statuses get mixed up (the interesting failure
-  mode is `rescoped` vs `delayed`, the same boundary flagged in the ground truth).
-- **Accuracy by predicted confidence** — a calibration check: are the agent's
-  `high`-confidence calls actually more often right than its `low`-confidence ones?
-- **Per-project agreement table** — disagreements listed first, so nothing is
-  hidden.
-
-The report is written to [`validation_report.md`](validation_report.md).
-
-```bash
-python -m pipeline.run        # produces data/predictions.csv (needs API keys)
-python -m pipeline.validate   # scores it -> validation_report.md
-```
-
-> **Current result (11-project gold set):** 55% exact-status accuracy, macro-F1
-> 0.54. Every disagreement is an *adjacent* status (e.g. `on_track` vs
-> `delayed`) where the agent read **fresher** evidence than the hand-coded
-> label — not a hallucination. The full breakdown lives in
-> [`validation_report.md`](validation_report.md).
-
-**Reading the numbers honestly:** the gold set is only 11 projects, so a single
-miss swings a per-status metric substantially. The report says this inline —
-treat the figures as *directional evidence that the pipeline broadly tracks
-reality*, not a precise accuracy guarantee. Expanding the gold set is the most
-valuable next improvement.
-
-
----
-
-## Step 5 — present (done)
+## Step 3 — present (done)
 
 The results are shown as a **static, single-page map dashboard** in
-[`dashboard/`](dashboard/) — plain HTML/CSS/JS with [MapLibre GL JS](https://maplibre.org/)
+[`docs/`](docs/) — plain HTML/CSS/JS with [MapLibre GL JS](https://maplibre.org/)
 (loaded from a CDN). It has **no backend and no build step**: the page just
-fetches one pre-computed `dashboard/data.json` and draws it, so it can be hosted
+fetches one pre-computed `docs/data.json` and draws it, so it can be hosted
 anywhere that serves static files (see *Hosting* below).
 
 Each project is a circle on the map, **colour-coded by delivery status** and
@@ -306,7 +232,7 @@ only paid for once, not on every weekly refresh):
 |--------|-----|-------|
 | [`pipeline/geocode.py`](pipeline/geocode.py) | Look up a lat/lon for each project's town (Nominatim / OpenStreetMap). | [`data/locations.csv`](data/locations.csv) |
 | [`pipeline/describe.py`](pipeline/describe.py) | Write the grounded "what it was funded to build" summary (one Tavily search + one Claude call per project, facts only). | [`data/descriptions.csv`](data/descriptions.csv) |
-| [`pipeline/build_dashboard.py`](pipeline/build_dashboard.py) | Join base + predictions + locations + descriptions into `dashboard/data.json`. | — |
+| [`pipeline/build_dashboard.py`](pipeline/build_dashboard.py) | Join base + predictions + locations + descriptions into `docs/data.json`. | — |
 
 Geocoding and descriptions are **static** — a project's town and original
 remit don't change week to week — so they are committed and reused; only
@@ -315,15 +241,15 @@ remit don't change week to week — so they are committed and reused; only
 ```bash
 python -m pipeline.geocode          # one-off: data/locations.csv
 python -m pipeline.describe         # one-off: data/descriptions.csv
-python -m pipeline.build_dashboard  # -> dashboard/data.json
+python -m pipeline.build_dashboard  # -> docs/data.json
 
 # preview locally (fetch() needs http://, not file://)
-cd dashboard && python3 -m http.server 8777   # then open http://localhost:8777
+cd docs && python3 -m http.server 8777   # then open http://localhost:8777
 ```
 
 **Basemap note.** The map currently draws tiles from OpenStreetMap's own tile
 server, which is fine for local/demo use. Before putting a high-traffic public
-link out, swap the tile URL in [`dashboard/app.js`](dashboard/app.js) to a
+link out, swap the tile URL in [`docs/app.js`](docs/app.js) to a
 provider cleared for embedding (e.g. CARTO Voyager — a one-line change); the map
 data is still OpenStreetMap underneath.
 
@@ -337,7 +263,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# API keys for Step 3 (not needed for Steps 1–2)
+# API keys for Step 2 (not needed for Step 1)
 cp .env.example .env   # then fill in TAVILY_API_KEY and your chosen LLM backend
 ```
 
@@ -346,10 +272,10 @@ cp .env.example .env   # then fill in TAVILY_API_KEY and your chosen LLM backend
 ## Repository layout
 
 ```
-data/        base dataset, ground-truth, predictions, locations & descriptions (CSV)
+data/        base dataset, predictions, locations & descriptions (CSV)
 pipeline/    scraping, retrieval, the classification agent, geocoding,
-             descriptions, dashboard build, and validation
-dashboard/   static MapLibre dashboard (index.html + styles.css + app.js + data.json)
+             descriptions, retrospectives, and dashboard build
+docs/        static MapLibre dashboard (index.html + styles.css + app.js + data.json)
 ```
 
 ## Keeping it up to date (productionisation)
@@ -368,17 +294,15 @@ overkill for a job that runs occasionally.
 
 ## Hosting (public link)
 
-The dashboard is fully static, so publishing it is just "serve the `dashboard/`
+The dashboard is fully static, so publishing it is just "serve the `docs/`
 folder":
 
-- **GitHub Pages** (free): push this repo to GitHub, then enable Pages. Pages
-  serves from the repo root, `/docs`, or a branch — not an arbitrary subfolder —
-  so either rename `dashboard/` → `docs/` and point Pages at `/docs`, or publish
-  it via a `gh-pages` branch. You get a URL like `https://<user>.github.io/<repo>/`.
-- **Netlify / Vercel / Cloudflare Pages** (free): drag-and-drop the `dashboard/`
-  folder, or connect the repo and set the publish directory to `dashboard/`.
+- **GitHub Pages** (free): push this repo to GitHub, then enable Pages and point
+  it at `/docs`. You get a URL like `https://<user>.github.io/<repo>/`.
+- **Netlify / Vercel / Cloudflare Pages** (free): drag-and-drop the `docs/`
+  folder, or connect the repo and set the publish directory to `docs/`.
 
-Only `dashboard/data.json` (plus the committed CSVs it is built from) ships —
+Only `docs/data.json` (plus the committed CSVs it is built from) ships —
 no API keys are needed at page-load, because all LLM/search/geocoding work
-happens ahead of time in the pipeline. Swap the basemap tiles (see the *Step 5*
+happens ahead of time in the pipeline. Swap the basemap tiles (see the *Step 3*
 note) before sending a high-traffic public link.
