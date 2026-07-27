@@ -48,21 +48,26 @@ const state = { markers: [], activeStatuses: new Set(Object.keys(STATUS_COLORS))
 
 const map = new maplibregl.Map({
   container: "map",
-  // OpenStreetMap standard raster tiles -- no API key required. Note: OSM's own
-  // tile server is intended for light/dev use; swap to CARTO Voyager or Esri
-  // before heavy public traffic (see README hosting notes).
+  // CARTO Voyager raster tiles -- no API key required and cleared for embedding
+  // in public sites, unlike OSM's own tile server (dev-use only). Map data is
+  // still OpenStreetMap underneath (see README hosting notes).
   style: {
     version: 8,
     sources: {
-      osm: {
+      basemap: {
         type: "raster",
-        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
+        tiles: [
+          "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+          "https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+          "https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+          "https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+        ],
         tileSize: 256,
         attribution:
-          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
       },
     },
-    layers: [{ id: "osm", type: "raster", source: "osm" }],
+    layers: [{ id: "basemap", type: "raster", source: "basemap" }],
   },
   center: [-2.7, 53.9], // North West England
   zoom: 7.4,
