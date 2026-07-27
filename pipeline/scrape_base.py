@@ -71,64 +71,57 @@ ROUND_SOURCES = {
 }
 
 # --------------------------------------------------------------------------- #
-# North West England local authorities
+# Covered local authorities, grouped by sub-region
 # --------------------------------------------------------------------------- #
-# Ceremonial counties of the North West region: Cheshire, Cumbria, Greater
-# Manchester, Lancashire, Merseyside. Keys are the *normalised* authority core
-# name (see ``normalize_council``); values are the sub-region we record as
-# ``region``. Matching is exact-on-normalised-name so that lookalikes such as
-# "Wyre Forest" (Worcestershire) are NOT mistaken for "Wyre" (Lancashire).
+# ``COUNCILS_BY_REGION`` maps each recorded sub-region (a ceremonial county) to
+# the *normalised* authority core names (see ``normalize_council``) that belong
+# to it. Matching is exact-on-normalised-name so that lookalikes such as "Wyre
+# Forest" (Worcestershire) are NOT mistaken for "Wyre" (Lancashire).
+#
+# To widen coverage, add a new sub-region block here (e.g. another county, or a
+# whole new England region's counties) — everything downstream reads the flat
+# ``COUNCIL_TO_REGION`` lookup derived below, so no other code changes.
 
-NW_COUNCILS = {
-    # Greater Manchester
-    "Bolton": "Greater Manchester",
-    "Bury": "Greater Manchester",
-    "Manchester": "Greater Manchester",
-    "Oldham": "Greater Manchester",
-    "Rochdale": "Greater Manchester",
-    "Salford": "Greater Manchester",
-    "Stockport": "Greater Manchester",
-    "Tameside": "Greater Manchester",
-    "Trafford": "Greater Manchester",
-    "Wigan": "Greater Manchester",
-    # Merseyside
-    "Knowsley": "Merseyside",
-    "Liverpool": "Merseyside",
-    "Sefton": "Merseyside",
-    "St Helens": "Merseyside",
-    "Wirral": "Merseyside",
-    # Cheshire (Halton and Warrington are ceremonial Cheshire unitaries)
-    "Cheshire East": "Cheshire",
-    "Cheshire West and Chester": "Cheshire",
-    "Halton": "Cheshire",
-    "Warrington": "Cheshire",
-    # Lancashire
-    "Blackburn with Darwen": "Lancashire",
-    "Blackpool": "Lancashire",
-    "Burnley": "Lancashire",
-    "Chorley": "Lancashire",
-    "Fylde": "Lancashire",
-    "Hyndburn": "Lancashire",
-    "Lancaster": "Lancashire",
-    "Pendle": "Lancashire",
-    "Preston": "Lancashire",
-    "Ribble Valley": "Lancashire",
-    "Rossendale": "Lancashire",
-    "South Ribble": "Lancashire",
-    "West Lancashire": "Lancashire",
-    "Wyre": "Lancashire",
-    "Lancashire": "Lancashire",  # Lancashire County Council
-    # Cumbria (as constituted at award time)
-    "Allerdale": "Cumbria",
-    "Barrow-in-Furness": "Cumbria",
-    "Carlisle": "Cumbria",
-    "Copeland": "Cumbria",
-    "Eden": "Cumbria",
-    "South Lakeland": "Cumbria",
-    "Cumbria": "Cumbria",  # Cumbria County Council
+COUNCILS_BY_REGION: dict[str, list[str]] = {
+    # --- North West England --------------------------------------------------
+    "Greater Manchester": [
+        "Bolton", "Bury", "Manchester", "Oldham", "Rochdale", "Salford",
+        "Stockport", "Tameside", "Trafford", "Wigan",
+    ],
+    "Merseyside": [
+        "Knowsley", "Liverpool", "Sefton", "St Helens", "Wirral",
+    ],
+    # Halton and Warrington are ceremonial Cheshire unitaries.
+    "Cheshire": [
+        "Cheshire East", "Cheshire West and Chester", "Halton", "Warrington",
+    ],
+    "Lancashire": [
+        "Blackburn with Darwen", "Blackpool", "Burnley", "Chorley", "Fylde",
+        "Hyndburn", "Lancaster", "Pendle", "Preston", "Ribble Valley",
+        "Rossendale", "South Ribble", "West Lancashire", "Wyre",
+        "Lancashire",  # Lancashire County Council
+    ],
+    # Cumbria as constituted at award time.
+    "Cumbria": [
+        "Allerdale", "Barrow-in-Furness", "Carlisle", "Copeland", "Eden",
+        "South Lakeland", "Cumbria",  # incl. Cumbria County Council
+    ],
 }
 
-# "Liverpool City Region" is a combined authority; normalise it onto Liverpool.
+# Flat {normalised council name -> sub-region} lookup derived from the grouped
+# map above. Raises on an accidental duplicate so an authority can't be silently
+# assigned to two regions.
+COUNCIL_TO_REGION: dict[str, str] = {}
+for _region, _councils in COUNCILS_BY_REGION.items():
+    for _council in _councils:
+        if _council in COUNCIL_TO_REGION:
+            raise ValueError(
+                f"Council {_council!r} listed under both "
+                f"{COUNCIL_TO_REGION[_council]!r} and {_region!r}"
+            )
+        COUNCIL_TO_REGION[_council] = _region
+
+# Combined-authority names that should normalise onto a member authority.
 COMBINED_AUTHORITY_ALIASES = {
     "Liverpool City Region": "Liverpool",
 }
@@ -169,8 +162,8 @@ def normalize_council(name: str) -> str:
 
 
 def lookup_region(name: str) -> str | None:
-    """Return the North West county for an authority, or None if not NW."""
-    return NW_COUNCILS.get(normalize_council(name))
+    """Return the sub-region for an authority, or None if not covered."""
+    return COUNCIL_TO_REGION.get(normalize_council(name))
 
 
 # --------------------------------------------------------------------------- #
