@@ -132,10 +132,6 @@ where primary evidence supports them, never invented to fill the table.
 
 ## Limitations & honesty notes
 
-- **Automated estimates, not official status.** Every status label is an
-  automated classification inferred from public text, not an official or
-  authoritative statement of a project's delivery position. Treat it as a
-  signal to investigate, not a verdict.
 - **North West only.** See the scope banner above.
 - A classification reflects the delivery position at the time of the run; a
   "completed" flagship element (e.g. Colne Market Hall) may sit inside a wider
@@ -251,10 +247,11 @@ python -m pipeline.build_dashboard  # -> docs/data.json
 cd docs && python3 -m http.server 8777   # then open http://localhost:8777
 ```
 
-**Basemap note.** The map draws tiles from **CARTO Voyager**, a provider cleared
-for embedding in public sites (no API key required); the map data is still
-OpenStreetMap underneath. The tile URL lives in [`docs/app.js`](docs/app.js) if
-you want to swap providers (e.g. MapTiler or Esri).
+**Basemap note.** The map draws tiles from Esri's free World Topographic
+service (light topographic style with terrain relief), which is cleared for
+light public/embedded use with attribution. The basemap is a single-line source
+swap in [`docs/app.js`](docs/app.js) — CARTO Voyager or OpenStreetMap standard
+are drop-in alternatives; the underlying map data is OpenStreetMap either way.
 
 
 ---
@@ -307,4 +304,5 @@ folder":
 
 Only `docs/data.json` (plus the committed CSVs it is built from) ships —
 no API keys are needed at page-load, because all LLM/search/geocoding work
-happens ahead of time in the pipeline.
+happens ahead of time in the pipeline. Swap the basemap tiles (see the *Step 3*
+note) before sending a high-traffic public link.

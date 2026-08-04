@@ -48,26 +48,23 @@ const state = { markers: [], activeStatuses: new Set(Object.keys(STATUS_COLORS))
 
 const map = new maplibregl.Map({
   container: "map",
-  // CARTO Voyager raster tiles -- no API key required and cleared for embedding
-  // in public sites, unlike OSM's own tile server (dev-use only). Map data is
-  // still OpenStreetMap underneath (see README hosting notes).
+  // Free Esri "World Topographic" raster basemap -- no API key required, light
+  // topographic style with terrain relief and National Landscape labels. Note
+  // Esri uses {z}/{y}/{x} tile order.
   style: {
     version: 8,
     sources: {
-      basemap: {
+      esri: {
         type: "raster",
         tiles: [
-          "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-          "https://b.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-          "https://c.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-          "https://d.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
+          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
         ],
         tileSize: 256,
         attribution:
-          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions">CARTO</a>',
+          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors · Tiles © <a href="https://www.esri.com/">Esri</a> — Esri, HERE, Garmin, USGS, and the GIS community',
       },
     },
-    layers: [{ id: "basemap", type: "raster", source: "basemap" }],
+    layers: [{ id: "esri", type: "raster", source: "esri" }],
   },
   center: [-2.7, 53.9], // North West England
   zoom: 7.4,
