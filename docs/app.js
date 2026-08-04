@@ -48,23 +48,21 @@ const state = { markers: [], activeStatuses: new Set(Object.keys(STATUS_COLORS))
 
 const map = new maplibregl.Map({
   container: "map",
-  // Free Esri "World Topographic" raster basemap -- no API key required, light
-  // topographic style with terrain relief and National Landscape labels. Note
-  // Esri uses {z}/{y}/{x} tile order.
+  // OpenStreetMap standard raster tiles -- no API key required. Note: OSM's own
+  // tile server is intended for light/dev use; swap to CARTO Voyager or Esri
+  // before heavy public traffic (see README hosting notes).
   style: {
     version: 8,
     sources: {
-      esri: {
+      osm: {
         type: "raster",
-        tiles: [
-          "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-        ],
+        tiles: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png"],
         tileSize: 256,
         attribution:
-          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors · Tiles © <a href="https://www.esri.com/">Esri</a> — Esri, HERE, Garmin, USGS, and the GIS community',
+          '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       },
     },
-    layers: [{ id: "esri", type: "raster", source: "esri" }],
+    layers: [{ id: "osm", type: "raster", source: "osm" }],
   },
   center: [-2.7, 53.9], // North West England
   zoom: 7.4,
